@@ -61,7 +61,7 @@ const products = [
 
 const ProductGrid = () => {
   return (
-    <section id="products-section" className="py-16 bg-gray-950">
+    <section className="py-16 bg-gray-950">
       <div className="container mx-auto px-4">
         <div className="flex items-center justify-between mb-12">
           <h2 className="text-3xl font-bold text-white">Featured Products</h2>
