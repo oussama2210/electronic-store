@@ -25,6 +25,13 @@ const categories = [
 ];
 
 const Categories = () => {
+  const handleCategoryClick = (categoryName: string) => {
+    const productsSection = document.getElementById('products-section');
+    if (productsSection) {
+      productsSection.scrollIntoView({ behavior: 'smooth' });
+    }
+  };
+
   return (
     <section className="py-16 bg-gray-900">
       <div className="container mx-auto px-4">
@@ -32,7 +39,11 @@ const Categories = () => {
         
         <div className="grid grid-cols-2 lg:grid-cols-4 gap-6">
           {categories.map((category) => (
-            <Card key={category.name} className="bg-gray-800/50 border-gray-700 hover:border-blue-500/50 transition-all duration-300 hover:scale-105 cursor-pointer group">
+            <Card 
+              key={category.name} 
+              className="bg-gray-800/50 border-gray-700 hover:border-blue-500/50 transition-all duration-300 hover:scale-105 cursor-pointer group"
+              onClick={() => handleCategoryClick(category.name)}
+            >
               <div className="p-4">
                 <div className="aspect-square bg-gray-700/30 rounded-lg mb-4 overflow-hidden">
                   <img 
