@@ -1,19 +1,20 @@
 
 import { useState } from "react";
-import { Menu, X, Search, ShoppingCart, User, Shield } from "lucide-react";
+import { Menu, X, Search, User, Shield } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Link } from "react-router-dom";
+import ShoppingCartComponent from "./ShoppingCart";
 
 const Header = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
 
   const navigation = [
     { name: 'Home', href: '/' },
-    { name: 'VR Headsets', href: '#' },
-    { name: 'Gaming Gear', href: '#' },
-    { name: 'Accessories', href: '#' },
-    { name: 'Deals', href: '#' },
+    { name: 'VR Headsets', href: '/' },
+    { name: 'Gaming Gear', href: '/' },
+    { name: 'Accessories', href: '/' },
+    { name: 'Deals', href: '/' },
   ];
 
   return (
@@ -63,12 +64,7 @@ const Header = () => {
             <Button variant="ghost" size="icon" className="text-gray-300 hover:text-white hover:bg-gray-800">
               <User className="w-5 h-5" />
             </Button>
-            <Button variant="ghost" size="icon" className="text-gray-300 hover:text-white hover:bg-gray-800 relative">
-              <ShoppingCart className="w-5 h-5" />
-              <span className="absolute -top-1 -right-1 bg-blue-500 text-white text-xs rounded-full h-4 w-4 flex items-center justify-center">
-                3
-              </span>
-            </Button>
+            <ShoppingCartComponent />
             
             {/* Mobile menu button */}
             <Button

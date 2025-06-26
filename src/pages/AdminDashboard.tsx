@@ -1,5 +1,5 @@
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -25,6 +25,12 @@ import {
 
 const AdminDashboard = () => {
   const [activeTab, setActiveTab] = useState("dashboard");
+  const [orders, setOrders] = useState([
+    { id: "#1234", customer: "John Doe", total: "$299", status: "Completed", date: "2024-01-15", items: "VR Headset Pro" },
+    { id: "#1235", customer: "Jane Smith", total: "$599", status: "Processing", date: "2024-01-14", items: "Gaming Mouse X1, Keyboard" },
+    { id: "#1236", customer: "Mike Johnson", total: "$89", status: "Pending", date: "2024-01-13", items: "Wireless Headset" },
+    { id: "#1237", customer: "Sarah Wilson", total: "$199", status: "Shipped", date: "2024-01-12", items: "Gaming Chair" },
+  ]);
 
   const sidebarItems = [
     { id: "dashboard", label: "Dashboard", icon: LayoutDashboard },
@@ -37,7 +43,7 @@ const AdminDashboard = () => {
 
   const stats = [
     { title: "Total Revenue", value: "$45,231", change: "+20.1%" },
-    { title: "Orders", value: "1,234", change: "+15.3%" },
+    { title: "Orders", value: orders.length.toString(), change: "+15.3%" },
     { title: "Products", value: "89", change: "+2.4%" },
     { title: "Customers", value: "2,345", change: "+12.5%" },
   ];
@@ -47,13 +53,6 @@ const AdminDashboard = () => {
     { id: 2, name: "Gaming Mouse X1", price: "$89", stock: 50, status: "Active" },
     { id: 3, name: "Mechanical Keyboard", price: "$129", stock: 0, status: "Out of Stock" },
     { id: 4, name: "Wireless Headset", price: "$199", stock: 15, status: "Active" },
-  ];
-
-  const orders = [
-    { id: "#1234", customer: "John Doe", total: "$299", status: "Completed", date: "2024-01-15" },
-    { id: "#1235", customer: "Jane Smith", total: "$599", status: "Processing", date: "2024-01-14" },
-    { id: "#1236", customer: "Mike Johnson", total: "$89", status: "Pending", date: "2024-01-13" },
-    { id: "#1237", customer: "Sarah Wilson", total: "$199", status: "Shipped", date: "2024-01-12" },
   ];
 
   const getStatusColor = (status: string) => {
@@ -66,6 +65,14 @@ const AdminDashboard = () => {
       case "Shipped": return "bg-purple-500";
       default: return "bg-gray-500";
     }
+  };
+
+  const updateOrderStatus = (orderId: string, newStatus: string) => {
+    setOrders(prevOrders =>
+      prevOrders.map(order =>
+        order.id === orderId ? { ...order, status: newStatus } : order
+      )
+    );
   };
 
   const renderContent = () => {
@@ -96,6 +103,7 @@ const AdminDashboard = () => {
                   <TableRow className="border-gray-700">
                     <TableHead className="text-gray-300">Order ID</TableHead>
                     <TableHead className="text-gray-300">Customer</TableHead>
+                    <TableHead className="text-gray-300">Items</TableHead>
                     <TableHead className="text-gray-300">Total</TableHead>
                     <TableHead className="text-gray-300">Status</TableHead>
                     <TableHead className="text-gray-300">Date</TableHead>
@@ -106,6 +114,7 @@ const AdminDashboard = () => {
                     <TableRow key={order.id} className="border-gray-700">
                       <TableCell className="text-white">{order.id}</TableCell>
                       <TableCell className="text-white">{order.customer}</TableCell>
+                      <TableCell className="text-gray-300">{order.items}</TableCell>
                       <TableCell className="text-white">{order.total}</TableCell>
                       <TableCell>
                         <Badge className={`${getStatusColor(order.status)} text-white`}>
@@ -175,7 +184,7 @@ const AdminDashboard = () => {
       case "orders":
         return (
           <div className="space-y-6">
-            <h2 className="text-2xl font-bold text-white">Orders</h2>
+            <h2 className="text-2xl font-bold text-white">Orders Management</h2>
             
             <Card className="p-6 bg-gray-800/50 border-gray-700">
               <Table>
@@ -183,6 +192,7 @@ const AdminDashboard = () => {
                   <TableRow className="border-gray-700">
                     <TableHead className="text-gray-300">Order ID</TableHead>
                     <TableHead className="text-gray-300">Customer</TableHead>
+                    <TableHead className="text-gray-300">Items</TableHead>
                     <TableHead className="text-gray-300">Total</TableHead>
                     <TableHead className="text-gray-300">Status</TableHead>
                     <TableHead className="text-gray-300">Date</TableHead>
@@ -194,11 +204,19 @@ const AdminDashboard = () => {
                     <TableRow key={order.id} className="border-gray-700">
                       <TableCell className="text-white">{order.id}</TableCell>
                       <TableCell className="text-white">{order.customer}</TableCell>
+                      <TableCell className="text-gray-300">{order.items}</TableCell>
                       <TableCell className="text-white">{order.total}</TableCell>
                       <TableCell>
-                        <Badge className={`${getStatusColor(order.status)} text-white`}>
-                          {order.status}
-                        </Badge>
+                        <select
+                          value={order.status}
+                          onChange={(e) => updateOrderStatus(order.id, e.target.value)}
+                          className="bg-gray-700 text-white border border-gray-600 rounded px-2 py-1 text-sm"
+                        >
+                          <option value="Pending">Pending</option>
+                          <option value="Processing">Processing</option>
+                          <option value="Shipped">Shipped</option>
+                          <option value="Completed">Completed</option>
+                        </select>
                       </TableCell>
                       <TableCell className="text-gray-300">{order.date}</TableCell>
                       <TableCell>
